@@ -174,71 +174,107 @@ We begin with the visibility $V(\mathbf{b},\nu)$ measured by a single baseline $
 \label{eq:MeasurementEqn}
 V(\mathbf{b},\nu) = \int I(\boldsymbol \theta, \nu) A \left(\frac{\boldsymbol \theta}{\theta_0}, \nu \right) \exp\left(-i 2 \pi \frac{\nu}{c} \mathbf{b} \cdot \boldsymbol \theta \right) d^2 \boldsymbol \theta,
 \end{equation}
-where $I(\boldsymbol \theta, \nu)$ is the sky temperature, $A (\boldsymbol \theta / \theta_0, \nu)$ is the primary beam, and $\theta_0$ is some fiducial beam width.  To estimate the Fourier amplitudes, we can imagine first forming a dirty map, weighting the resulting image, and then Fourier transforming along both the angular and spectral directions:
+where $I(\boldsymbol \theta, \nu)$ is the sky temperature, $A (\boldsymbol \theta / \theta_0, \nu)$ is the primary beam, and $\theta_0$ is some fiducial beam width.  To better relate this to the cosmological volume surveyed, we may consider both the sky temperature and the primary beam to be functions not of $\boldsymbol \theta$ and $\nu$, but instead, of three-dimensional comoving coordinates $\mathbf{r}$:
+\begin{equation}
+V(\mathbf{b}, \nu) = \int I(\mathbf{r}) A( \mathbf{r}) \exp \left( - i \frac{ 2 \pi \nu }{c D_c} \mathbf{b}\cdot \mathbf{r}_\perp \right) \frac{d^2 \mathbf{r}_\perp}{D_c^2},
+\end{equation}
+where
+\begin{equation}
+D_c \equiv \frac{c}{H_0} \int_0^z \frac{dz^\prime}{E(z^\prime)}; \,\, E(z) \equiv \sqrt{\Omega_m (1+z)^3 + \Omega_\Lambda},
+\end{equation}
+with $c$, $H_0$, $z$, $\Omega_m$, and $\Omega_\Lambda$ as conventionally defined, and $\mathbf{r} \equiv (\mathbf{r}_\perp, r_\parallel)$, where $\mathbf{r}_\perp$ is the two-dimensional comoving distance perpendicular to the line-of-sight, and $r_\parallel$ is the comoving line-of-sight distance.  Now, suppose we were to ignore the inherent chromaticity of the interferometer, replacing $\nu$ in the exponent with $\nu_0$.  From the results of Paper I and Ref. \cite{Parsons2012b}, we know that this is tantamount to working only with short baselines, or being far away from the wedge.  Making the identification
+\begin{equation}
+\label{eq:kperpMapping}
+\mathbf{k}_\perp = \frac{2 \pi \nu_0 \mathbf{b} }{c D_c} \approx \frac{2 \pi \nu \mathbf{b} }{ c D_c}
+\end{equation}
+and\footnote{The mapping between $r_\parallel$ and $\nu$ that we specify in Eq. \eqref{eq:RparaMapping} is really a local, linearized relation between \emph{changes} in the two quantities, $\Delta r_\parallel$ and $\Delta \nu$.  Within a narrow range in observation redshift, however, we may redefine our coordinates such that Eq. \eqref{eq:RparaMapping} holds between $r_\parallel$ and $\nu$.}
+\begin{equation}
+\label{eq:RparaMapping}
+r_\parallel = \frac{c}{H_0 \nu_{21}} \frac{(1+z)^2}{E(z)} \nu,
+\end{equation}
+where $\nu_{21} = 1420 \,\textrm{MHz}$ then gives
+\begin{equation}
+\label{eq:ManipulatedMeas}
+\overline{V} (\mathbf{k}_\perp, r_\parallel) = \int I(\mathbf{r}) A( \mathbf{r}) \exp \left( - i \mathbf{k}_\perp \cdot \mathbf{r}_\perp \right) \frac{d^2 \mathbf{r}_\perp}{D_c^2},
+\end{equation}
+with $\overline{V} (\mathbf{k}_\perp, r_\parallel) \equiv V \left( \mathbf{b} = \frac{c D_c \mathbf{k}_\perp }{ 2 \pi \nu_0}, \nu = \frac{H_0 \nu_{21} E(z)}{c (1+z)^2} \right)$.  An interferometer therefore measures sky modes in a hybrid space where the spatial directions are specified by Fourier modes and the line-of-sight direction is specified by frequency.
+
+To estimate the Fourier amplitudes in full three-dimensional $\mathbf{k} \equiv (\mathbf{k}_\perp, k_\parallel)$ space, we can imagine first forming a dirty map by gridding the visibility measurements with natural weighting, then Fourier transforming the spatial directions, weighting the resulting image, and finally transforming back to Fourier space in all three directions:
 \begin{equation}
 \label{eq:zalpha}
-z_\alpha = \int d^3\mathbf{r}\, e^{-i 2\pi \mathbf{q}_\alpha \cdot \mathbf{r}} \chi (\mathbf{r}) \sum_i \exp\left(i 2 \pi \frac{\nu}{c} \mathbf{b}_i \cdot \boldsymbol \theta \right) V(\mathbf{b}_i, \nu),
+z_\alpha \propto \int d^3\mathbf{r}\, e^{-i \mathbf{k}_\alpha \cdot \mathbf{r}} \chi (\mathbf{r}) \int \frac{d^2 \mathbf{k}_\perp}{(2\pi)^2} \tilde{\rho}(\mathbf{k}_\perp) \overline{V} (\mathbf{k}_\perp, r_\parallel) e^{i \mathbf{k}_\perp \cdot \mathbf{r}_\perp},
 \end{equation}
-where we have defined $\mathbf{q} \equiv (\mathbf{u}, \eta)$ and $\mathbf{r} \equiv (\boldsymbol \theta, \nu)$, and $\chi(\mathbf{r})$ is a weighting function.  Note that since we have yet to specify the form of $\chi$, our expression for $z_\alpha$ is flexible enough to describe many common prescriptions for imaging.  Since a multiplicative weighting in the image domain is equivalent to a convolution in $uv$ space, this includes  the prescription suggested in \cite{Tegmark1997a,Morales2008}, where the visibilities are re-gridded with a $uv$ space primary beam kernel.  Our goal in this section will be to find a form for $\chi$ that minimizes the variance of our separable power spectrum estimator $\widehat{p}_\alpha =  | z_\alpha |^2$.
+where $z_\alpha$ is the Fourier amplitude at $\mathbf{k} = \mathbf{k}_\alpha$, $\chi(\mathbf{r})$ is a weight function, and $\tilde{\rho} (\mathbf{k}_\perp)$ is a density distribution of baselines mapped on the $\mathbf{k}_\perp$ plane using Eq. \eqref{eq:kperpMapping}, normalized so that $\int \frac{d^2 \mathbf{k}_\perp}{(2\pi)^2} \tilde{\rho}(\mathbf{k}_\perp)$ equals the total number of baselines in the array.  Note that since we have yet to specify the form of $\chi$, our expression for $z_\alpha$ is flexible enough to describe many common prescriptions for imaging.  Since a multiplicative weighting in the image domain is equivalent to a convolution in Fourier space, this includes  the prescription suggested in Refs. \cite{Tegmark1997a,Morales2008}, where the visibilities are re-gridded with a Fourier space primary beam kernel.  Our goal in this section will be to find a form for $\chi$ that minimizes the variance of our separable power spectrum estimator $\widehat{p}_\alpha =  | z_\alpha |^2$.
 
-For analytical tractability, it is convenient to replace the sum in Eq. \eqref{eq:zalpha} with an integral over a  continuous distribution of baselines $ \tilde{\rho} (\mathbf{b})$, i.e.
+%For analytical tractability, it is convenient to replace the sum in Eq. \eqref{eq:zalpha} with an integral over a  continuous distribution of baselines $ \tilde{\rho} (\mathbf{b})$, i.e.
+%\begin{equation}
+%\sum_i  ( \dots ) \rightarrow \int d^2 \mathbf{b} \, \tilde{\rho} (\mathbf{b})  ( \dots ),
+%\end{equation}
+%where $ \tilde{\rho} (\mathbf{b})$ is normalized such that $\int d^2 \mathbf{b} \, \tilde{\rho} (\mathbf{b}) $ equals the total number of baselines used in the analysis.  Making this substitution and
+Inserting Eq. \eqref{eq:ManipulatedMeas} into Eq. \eqref{eq:zalpha} gives
 \begin{equation}
-\sum_i  ( \dots ) \rightarrow \int d^2 \mathbf{b} \, \tilde{\rho} (\mathbf{b})  ( \dots ),
+z_\alpha \propto \!\! \int \! d^3\mathbf{r}\, e^{-i \mathbf{k}_\alpha \cdot \mathbf{r}} \chi (\mathbf{r}) \! \int \!d^2\mathbf{r}_\perp^\prime I (\mathbf{r}_\perp^\prime, r_\parallel) A (\mathbf{r}_\perp^\prime, r_\parallel) \rho( \mathbf{r}_\perp \!\! - \mathbf{r}_\perp^\prime).
 \end{equation}
-where $ \tilde{\rho} (\mathbf{b})$ is normalized such that $\int d^2 \mathbf{b} \, \tilde{\rho} (\mathbf{b}) $ equals the total number of baselines used in the analysis.  Making this substitution and inserting Eq. \eqref{eq:MeasurementEqn} into Eq. \eqref{eq:zalpha} gives
+The function $\rho$ is the synthesized beam of the interferometer array, and is given by the inverse Fourier transform\footnote{In this section, we adopt a Fourier convention where the Fourier transform of a function $f(\mathbf{r})$ is given by $\widetilde{f}(\mathbf{k}) = \int d^3 \mathbf{r} \,e^{-i \mathbf{k} \cdot \mathbf{r}} f(\mathbf{r})$, with the inverse transform given by $f(\mathbf{x}) = \int \frac{d^3 \mathbf{k}}{(2\pi)^3}e^{i \mathbf{k} \cdot \mathbf{r}} \widetilde{f}(\mathbf{k})$.} of $\tilde{\rho}$ over the spatial directions.
+%, i.e., $\rho(\mathbf{r}_\perp) = \int \frac{d^3 \mathbf{k}_\perp}{(2\pi)^2} e^{i \mathbf{k}_\perp \cdot \mathbf{r}} \tilde{\rho}(\mathbf{k}_\perp)$.
+Now, the primary beam is typically much smoother than the sky signal, and varies on a characteristic length scale that is much wider than that of the synthesized beam.  We may therefore factor the primary beam out of the integral, and applying Parseval's theorem to the result gives
 \begin{eqnarray}
-z_\alpha &&= \int d^3\mathbf{r}\, e^{-i 2\pi \mathbf{q}_\alpha \cdot \mathbf{r}} \chi (\mathbf{r}) \times \nonumber \\
-&& \int d^2 \boldsymbol \theta^\prime I(\boldsymbol \theta^\prime, \nu) A \left(\frac{\boldsymbol \theta^\prime}{\theta_0}, \nu \right) 
-\int d^2 \mathbf{b}  \tilde{\rho} (\mathbf{b}) e^{i 2\pi \frac{\nu}{c} \mathbf{b} \cdot ( \boldsymbol \theta - \boldsymbol \theta^\prime)} \quad.
+z_\alpha &\propto& \int  \!\! \frac{d^3 \mathbf{k}}{(2\pi)^3}d^3 \mathbf{r} \,e^{-i (\mathbf{k}_\alpha - \mathbf{k}) \cdot \mathbf{r}} \chi (\mathbf{r}) A(\mathbf{r}) \tilde{\rho} (\mathbf{k}_\perp) \widetilde{I} (\mathbf{k}) \nonumber \\
+&=&\int  \!\! \frac{d^3 \mathbf{k}}{(2\pi)^3} \widetilde{\psi}(\mathbf{k}_\alpha - \mathbf{k}) \tilde{\rho} (\mathbf{k}_\perp) \widetilde{I} (\mathbf{k}) ,
 \end{eqnarray}
-The integral over $\mathbf{b}$ is the inverse Fourier transform of the baseline distribution, and on a frequency-by-frequency basis, acts like a synthesized beam.  Denoting this inverse Fourier transform by $\rho$, we have
-\begin{eqnarray}
-z_\alpha \approx && \int d^3\mathbf{r}\, e^{-i 2\pi \mathbf{q}_\alpha \cdot \mathbf{r}} \chi (\mathbf{r}) A \left( \mathbf{r} \right) \times \nonumber \\
-&& \qquad \int d^2 \boldsymbol \theta^\prime I(\boldsymbol \theta^\prime, \nu) \rho \left[ \frac{\nu}{c}( \boldsymbol \theta - \boldsymbol \theta^\prime) \right]
-\end{eqnarray}
-To make further progress, we make the assumption that the synthesized beam is frequency-independent and make the substitution $\nu \rightarrow \nu_0$ in the argument of $\rho$.  This essentially means ignoring the inherent chromaticity of our interferometer, which is equivalent to working only with short baselines and focusing measurements away from the foreground wedge in Fourier space.  After some algebra, $z_\alpha$ simplifies to
-\begin{eqnarray}
-z_\alpha &=& \int d^3 \mathbf{r} \,d^3 \mathbf{q}\, e^{-i 2 \pi (\mathbf{q}_\alpha - \mathbf{q}) \cdot \mathbf{r}} \chi (\mathbf{r}) A(\mathbf{r}) \tilde{s} (\mathbf{u}) \widetilde{I} (\mathbf{q}) \nonumber \\
-&=&\int d^3 \mathbf{q}\, \widetilde{\psi}(\mathbf{q}_\alpha - \mathbf{q}) \tilde{s} (\mathbf{u}) \widetilde{I} (\mathbf{q}) ,
-\end{eqnarray}
-where $\widetilde{I}$ is the Fourier transform of the sky temperature, $\widetilde{\psi}$ is the Fourier transform of the newly-defined $\psi (\mathbf{r}) \equiv \chi(\mathbf{r}) A(\mathbf{r})$, and $\tilde{s} (\mathbf{u}) \equiv (c / \nu_0) \tilde{\rho} ( \mathbf{b} = \mathbf{u} c / \nu_0 )$ is the baseline probability distribution in $uv$ coordinates at frequency $\nu_0$.  The signal covariance matrix is then given by
+%\begin{eqnarray}
+%&& \int d^2 \boldsymbol \theta^\prime I(\boldsymbol \theta^\prime, \nu) A \left(\frac{\boldsymbol \theta^\prime}{\theta_0}, \nu \right) 
+%\int d^2 \mathbf{b}  \tilde{\rho} (\mathbf{b}) e^{i 2\pi \frac{\nu}{c} \mathbf{b} \cdot ( \boldsymbol \theta - \boldsymbol \theta^\prime)} \quad.
+%\end{eqnarray}
+%The integral over $\mathbf{b}$ is the inverse Fourier transform of the baseline distribution, and on a frequency-by-frequency basis, acts like a synthesized beam.  Denoting this inverse Fourier transform by $\rho$, we have
+%\begin{eqnarray}
+%z_\alpha \approx && \int d^3\mathbf{r}\, e^{-i 2\pi \mathbf{q}_\alpha \cdot \mathbf{r}} \chi (\mathbf{r}) A \left( \mathbf{r} \right) \times \nonumber \\
+%&& \qquad \int d^2 \boldsymbol \theta^\prime I(\boldsymbol \theta^\prime, \nu) \rho \left[ \frac{\nu}{c}( \boldsymbol \theta - \boldsymbol \theta^\prime) \right]
+%\end{eqnarray}
+%To make further progress, we make the assumption that the synthesized beam is frequency-independent and make the substitution $\nu \rightarrow \nu_0$ in the argument of $\rho$.  This essentially means ignoring the inherent chromaticity of our interferometer, which is equivalent to working only with short baselines and focusing measurements away from the foreground wedge in Fourier space.  After some algebra, $z_\alpha$ simplifies to
+%\begin{eqnarray}
+%z_\alpha &=& \int d^3 \mathbf{r} \,d^3 \mathbf{q}\, e^{-i 2 \pi (\mathbf{q}_\alpha - \mathbf{q}) \cdot \mathbf{r}} \chi (\mathbf{r}) A(\mathbf{r}) \tilde{s} (\mathbf{u}) \widetilde{I} (\mathbf{q}) \nonumber \\
+%&=&\int d^3 \mathbf{q}\, \widetilde{\psi}(\mathbf{q}_\alpha - \mathbf{q}) \tilde{s} (\mathbf{u}) \widetilde{I} (\mathbf{q}) ,
+%\end{eqnarray}
+where $\widetilde{I}$ is the Fourier transform of the sky temperature, and $\widetilde{\psi}$ is the Fourier transform of the newly-defined $\psi (\mathbf{r}) \equiv \chi(\mathbf{r}) A(\mathbf{r})$.  The signal covariance matrix is then given by
 \begin{eqnarray}
 \label{eq:NotYetFactoredSab}
 \mathbf{S}_{\alpha \beta} &\equiv& \langle z_\alpha z_\beta^* \rangle \nonumber \\
-&=& \int d^3 \mathbf{q} \,\tilde{s} (\mathbf{u})^2 P(\mathbf{q}) \widetilde{\psi}(\mathbf{q}_\alpha - \mathbf{q}) \widetilde{\psi}^*(\mathbf{q}_\beta - \mathbf{q}), \qquad
+&\propto& \int \frac{d^3 \mathbf{k}}{(2\pi)^3} \,\tilde{\rho} (\mathbf{k}_\perp)^2 P(\mathbf{k}) \widetilde{\psi}(\mathbf{k}_\alpha - \mathbf{k}) \widetilde{\psi}^*(\mathbf{k}_\beta - \mathbf{k}), \qquad
 \end{eqnarray}
-where we have used the definition of the power spectrum, $\langle \widetilde{I}(\mathbf{q}) \widetilde{I}(\mathbf{q^\prime})^* \rangle \equiv P(\mathbf{q}) \delta(\mathbf{q} - \mathbf{q}^\prime)$.  In the literature, it is often assumed that the power spectrum is smooth and slowly varying.  In contrast, as long as $\chi (\mathbf{r})$ is not taken to be too narrow, a relatively broad primary beam $A(\mathbf{r})$ will ensure that $\widetilde{\psi}$ is sharply peaked.  We may therefore factor $P(\mathbf{q})$ out of the integral \cite{McQuinn2006,Parsons2012a}.  Assuming that $\tilde{s} (\mathbf{u})$ is also smooth, this gives
+where we have used the definition of the power spectrum, $\langle \widetilde{I}(\mathbf{k}) \widetilde{I}(\mathbf{k^\prime})^* \rangle \equiv P(\mathbf{k}) (2\pi)^3 \delta(\mathbf{k} - \mathbf{k}^\prime)$.  In the literature, it is often assumed that the power spectrum is smooth and slowly varying.  In contrast, as long as $\chi (\mathbf{r})$ is not taken to be too narrow, a relatively broad primary beam $A(\mathbf{r})$ will ensure that $\widetilde{\psi}$ is sharply peaked.  We may therefore factor $P(\mathbf{k})$ out of the integral \cite{McQuinn2006,Parsons2012a}.  Assuming that $\tilde{\rho} (\mathbf{k}_\perp)$ is also smooth, this gives
 \begin{eqnarray}
-\mathbf{S}_{\alpha \beta} &\equiv& \tilde{s}^2 P \int d^3 \mathbf{q} \,\widetilde{\psi}(\mathbf{q}_\alpha - \mathbf{q}) \widetilde{\psi}^*(\mathbf{q}_\beta - \mathbf{q}) \nonumber \\
-&=& \tilde{s}^2 P \int d^3 \mathbf{r} \, \chi^2 (\mathbf{r}) A^2 (\mathbf{r}) e^{-i 2 \pi (\mathbf{q}_\alpha - \mathbf{q}_\beta) \cdot \mathbf{r}},
+\mathbf{S}_{\alpha \beta} &\equiv& \tilde{\rho}^2 P \int \frac{d^3 \mathbf{k}}{(2\pi)^3}  \,\widetilde{\psi}(\mathbf{k}_\alpha - \mathbf{k}) \widetilde{\psi}^*(\mathbf{k}_\beta - \mathbf{k}) \nonumber \\
+&=& \tilde{\rho}^2 P \int d^3 \mathbf{r} \, \chi^2 (\mathbf{r}) A^2 (\mathbf{r}) e^{-i (\mathbf{k}_\alpha - \mathbf{k}_\beta) \cdot \mathbf{r}},
 \end{eqnarray}
-where we have defined $\tilde{s} \equiv \tilde{s} [(\mathbf{u}_\alpha + \mathbf{u}_\beta)/2]$, $P\equiv P [(\mathbf{q}_\alpha + \mathbf{q}_\beta)/2]$, and in the last equality we used Parseval's theorem.  The expected value of our estimator is given by the diagonal elements of this matrix, i.e.
+where we have defined $\tilde{\rho} \equiv \tilde{s} [(\mathbf{k}_{\perp \alpha} + \mathbf{k}_{\perp \beta})/2]$, $P\equiv P [(\mathbf{k}_\alpha + \mathbf{k}_\beta)/2]$, and in the last equality we used Parseval's theorem.  The expected value of our estimator is given by the diagonal elements of this matrix, i.e.
 \begin{equation}
-\langle \widehat{p}_\alpha \rangle =  \langle | z_\alpha |^2 \rangle = \mathbf{S}_{\alpha \alpha} = \tilde{s}^2 P \int d^3 \mathbf{r} \, \chi^2 (\mathbf{r}) A^2 (\mathbf{r}) .
+\langle \widehat{p}_\alpha \rangle =  \langle | z_\alpha |^2 \rangle = \mathbf{S}_{\alpha \alpha} \propto \tilde{\rho}^2 P \int d^3 \mathbf{r} \, \chi^2 (\mathbf{r}) A^2 (\mathbf{r}) .
 \end{equation}
 
-To compute the error bars on this mean power spectrum estimate, we also require the instrumental noise contribution to the total covariance.  The instrumental noise enters as an additive contribution $n(\mathbf{b}_i,\nu)$ to the visibility.  Inserting $n(\mathbf{b}_i,\nu)$ in the place of $V(\mathbf{b}_i, \nu)$ in Eq. \eqref{eq:zalpha} gives the noise contribution to the Fourier amplitude $n_\alpha$.  Forming the noise covariance $\mathbf{N}_{\alpha \beta} \equiv \langle n_\alpha n_\beta^* \rangle$ then yields
+To compute the error bars on this mean power spectrum estimate, we also require the instrumental noise contribution to the total covariance.  The instrumental noise enters as an additive contribution to the visibility.  Now, in Eq. \eqref{eq:zalpha}, the visibility data is gridded on the $\mathbf{k}_\perp$ with natural weighting.  We can imagine, then, that each $\mathbf{k}_\perp$ location has an associated effective instrumental noise $n(\mathbf{k}_\perp, r_\parallel)$ with an $r_\parallel$ (or $\nu$) dependence because the instrumental noise may be chromatic.  Inserting $n(\mathbf{k}_\perp,r_\parallel)$ in the place of $\overline{V}(\mathbf{k}_\perp, r_\parallel)$ in Eq. \eqref{eq:zalpha} gives the noise contribution  $n_\alpha$ to the $\alpha$th Fourier amplitude.  Forming the noise covariance $\mathbf{N}_{\alpha \beta} \equiv \langle n_\alpha n_\beta^* \rangle$ then yields
 \begin{eqnarray}
-\mathbf{N}_{\alpha \beta} = \int d^3 \mathbf{r} d^3 \mathbf{r}^\prime e^{-i 2\pi \mathbf{q}_\alpha \cdot \mathbf{r}} e^{i 2 \pi \mathbf{q}_\beta \cdot \mathbf{r}^\prime} \chi( \mathbf{r} ) \chi( \mathbf{r}^\prime) \times \nonumber \\
-\sum_{ij} e^{i 2 \pi \frac{\nu}{c} \mathbf{b}_i \cdot \boldsymbol \theta} e^{-i 2 \pi \frac{\nu}{c} \mathbf{b}_j \cdot \boldsymbol \theta^\prime} \langle n(\mathbf{b}_i,\nu) n(\mathbf{b}_j,\nu^\prime)^* \rangle.
+&& \mathbf{N}_{\alpha \beta}  = \int d^3 \mathbf{r} d^3 \mathbf{r}^\prime e^{-i  \mathbf{k}_\alpha \cdot \mathbf{r}} e^{i  \mathbf{k}_\beta \cdot \mathbf{r}^\prime} \chi( \mathbf{r} ) \chi( \mathbf{r}^\prime) \times \nonumber \\
+&&\int \frac{d^2 \mathbf{k}_\perp}{(2\pi)^2} \frac{d^2 \mathbf{k}_\perp^\prime}{(2\pi)^2} e^{i \mathbf{k}_\perp \cdot \mathbf{r}_\perp} e^{-i \mathbf{k}_\perp^\prime \cdot \mathbf{r}_\perp^\prime } \langle n(\mathbf{k}_\perp,r_\parallel) n(\mathbf{k}_\perp^\prime,r_\parallel^\prime)^* \rangle. \qquad
 \end{eqnarray}
-To simplify this expression, we assume that the instrumental noise is uncorrelated between baselines and frequency channels, so that
-\begin{equation}
- \langle n(\mathbf{b}_i,\nu) n(\mathbf{b}_j,\nu^\prime)^* \rangle = \sigma^2 B_\textrm{chan} \delta(\nu- \nu^\prime) \delta_{ij},
-\end{equation}
-where $\sigma^2$ is the noise variance in a single frequency channel, and $B_\textrm{chan}$ (the frequency channel width) adjusts for noise correlations within frequency channels in our continuous description.  Inserting this into our noise covariance and once again switching to a continuous description of the baseline distribution gives
+To simplify this expression, we assume that the instrumental noise is uncorrelated between different $\mathbf{k}_\perp$ modes and frequency channels, so that
 \begin{eqnarray}
-\mathbf{N}_{\alpha \beta} = \int d^3 \mathbf{r} d^3 \mathbf{r}^\prime e^{-i 2\pi \mathbf{q}_\alpha \cdot \mathbf{r}} e^{i 2 \pi \mathbf{q}_\beta \cdot \mathbf{r}^\prime} \chi( \mathbf{r} ) \chi( \mathbf{r}^\prime ) \times \nonumber \\
-\sigma^2 B_\textrm{chan} \delta(\nu - \nu^\prime) \rho \left[ \frac{\nu}{c}( \boldsymbol \theta - \boldsymbol \theta^\prime) \right]. \quad
+\langle n(\mathbf{k}_\perp,r_\parallel) n(\mathbf{k}_\perp^\prime,r_\parallel^\prime)^* \rangle = && \sigma^2 (\mathbf{k}_\perp,r_\parallel )  \times \nonumber \\
+&& (2\pi)^2 \delta(r_\parallel - r_\parallel^\prime) \delta(\mathbf{k}_\perp - \mathbf{k}_\perp^\prime), \qquad
 \end{eqnarray}
-For an instrument with $uv$ coverage that is both broad and dense, $\rho$ will be sharply peaked.  Approximating this as $\Omega \, \delta(\boldsymbol \theta - \boldsymbol \theta^\prime)$ (where $\Omega$ is the field of view) yields
+where $\sigma^2$ is a noise variance whose amplitude we will fix later.  Inserting this into our noise covariance gives (after some algebra)
+\begin{eqnarray}
+\mathbf{N}_{\alpha \beta} = \int \frac{d^2 \mathbf{k}_\perp}{(2\pi)^2} dr_\parallel \, e^{-i (k_{\parallel \alpha} - k_{\parallel \beta}) r_\parallel} \sigma^2 (\mathbf{k}_\perp,r_\parallel ) \times \nonumber \\
+\overline{\chi}(\mathbf{k}_{\alpha \perp} - \mathbf{k}_\perp, r_\parallel) \overline{\chi}(\mathbf{k}_{\beta \perp} - \mathbf{k}_\perp, r_\parallel)^*,
+\end{eqnarray}
+where $\overline{\chi}$ is the Fourier transform of $\chi(\mathbf{r})$ over the spatial directions only.  As before, we assume that $\chi(\mathbf{r})$ is smooth and broad (this can self-consistently checked later), which means that $\overline{\chi}$ will be narrowly peaked.  The noise variance $\sigma^2$ may therefore be factored out of the integral, and invoking Parseval's theorem in the spatial directions yields
 \begin{equation}
-\mathbf{N}_{\alpha \beta} = \int d^3 \mathbf{r} \,\chi^2 (\mathbf{r}) \sigma^2 B_\textrm{chan} \Omega e^{-i 2 \pi (\mathbf{q}_\alpha - \mathbf{q}_\beta) \cdot \mathbf{r}},
+\mathbf{N}_{\alpha \beta} = \int d^3 \mathbf{r} \,\chi^2 (\mathbf{r}) \sigma^2 e^{-i (\mathbf{k}_\alpha - \mathbf{k}_\beta) \cdot \mathbf{r}},
 \end{equation}
-and therefore a total covariance $\mathbf{C} \equiv \mathbf{S} + \mathbf{N}$ given by
+where $\sigma^2 \equiv \sigma^2 \left( \frac{\mathbf{k}_{\perp \alpha} + \mathbf{k}_{\perp \beta}}{  2}, r_\parallel \right)$.  The total covariance $\mathbf{C} \equiv \mathbf{S} + \mathbf{N}$ is then
 \begin{equation}
 \label{eq:Ctot}
-\mathbf{C}_{\alpha \beta} =\int d^3 \mathbf{r} \,\  \chi^2 (\mathbf{r}) \left[ \sigma^2 B_\textrm{chan} \Omega + \tilde{s}^2 P A^2 (\mathbf{r}) \right] e^{-i 2 \pi (\mathbf{q}_\alpha - \mathbf{q}_\beta) \cdot \mathbf{r}}.
+\mathbf{C}_{\alpha \beta} =\int d^3 \mathbf{r} \,\  \chi^2 (\mathbf{r}) \left[ \sigma^2 + \tilde{\rho}^2 P A^2 (\mathbf{r}) \right] e^{-i  (\mathbf{k}_\alpha - \mathbf{k}_\beta) \cdot \mathbf{r}}.
 \end{equation}
 As long as $A(\mathbf{r})$ and $\chi(\mathbf{r})$ are smooth and broad, this shows that the $\alpha$th and $\beta$th Fourier cells will be correlated only if $|\mathbf{q}_\alpha - \mathbf{q}_\beta|$ is small.  In the $\mathbf{u}$ direction, this scale is set by the Fourier transform of the primary beam, and in the $\eta$ direction, the inverse of the observation bandwidth $B_\textrm{band}$.  It therefore makes sense to bin our power spectra estimates in annuli whose characteristic dimensions are larger than these scales, so that different annuli are uncorrelated.  The resulting variance $\Delta p_A$ in our binned estimator $\widehat{p}_A$ is then
 \begin{equation}
